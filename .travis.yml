@@ -1,0 +1,14 @@
+language: go
+go:
+  - "1.10.x"
+  - master
+before_deploy:
+  - make dist
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: $GITHUB_TOKEN
+  file_glob: true
+  file: "$TRAVIS_BUILD_DIR/dist/*.{tar.gz,zip}"
+  on:
+    tags: true
