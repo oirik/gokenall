@@ -93,6 +93,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
+kenall
+bin/
+dist/
 vendor/
 .vendor-new/

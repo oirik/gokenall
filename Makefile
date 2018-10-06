@@ -1,4 +1,4 @@
-NAME      := $(shell basename `pwd`)
+NAME      := kenall
 VERSION   := $(shell git describe --tags --abbrev=0)
 REVISION  := $(shell git rev-parse --short HEAD)
 GODEP     := $(shell command -v dep 2> /dev/null)
@@ -6,7 +6,7 @@ GOLINT    := $(shell command -v golint 2> /dev/null)
 LDFLAGS   := -X 'main.Version=$(VERSION)' -X 'main.Revision=$(REVISION)'
 DISTDIR   :=./dist
 VENDORDIR :=./vendor
-DIST_DIRS := find * -type d -exec
+EXEC_DIRS := find * -type d -exec
 
 .PHONY: test
 test: lint
@@ -30,7 +30,7 @@ deps: godep
 
 .PHONY: build
 build: deps
-	go build -ldflags "$(LDFLAGS)" ./...
+	go build -ldflags "$(LDFLAGS)" -o bin/$(NAME)
 
 .PHONY: clean
 clean:
@@ -62,8 +62,8 @@ cross-build: test
 .PHONY: dist
 dist: cross-build
 	cd dist && \
-	$(DIST_DIRS) cp ../LICENSE {} \; && \
-	$(DIST_DIRS) cp ../README.md {} \; && \
-	$(DIST_DIRS) tar -zcf $(NAME)-${VERSION}-{}.tar.gz {} \; && \
-	$(DIST_DIRS) zip -r $(NAME)-${VERSION}-{}.zip {} \; && \
+	$(EXEC_DIRS) cp ../LICENSE {} \; && \
+	$(EXEC_DIRS) cp ../README.md {} \; && \
+	$(EXEC_DIRS) tar -zcf $(NAME)-${VERSION}-{}.tar.gz {} \; && \
+	$(EXEC_DIRS) zip -r $(NAME)-${VERSION}-{}.zip {} \; && \
 	cd ..
