@@ -71,6 +71,21 @@ $ kenall updated -p `cat UPDATED` > UPDATED && kenall download -x | kenall norma
 
 ```
 $ kenall help
+kenall is a tool for managing ken_all.csv
+
+Usage:
+
+  kenall <command> [arguments]
+
+The commands are:
+
+  download   Download ken_all.zip from japanpost website
+  help       Show help information
+  normalize  Normalize -make easy to use- input (file or standard input if no argument)
+  updated    Read updated date of data from japanpost website. Exit status 0 if later than [argument](yyyyMMdd) or exit status 1.
+  version    Show version information
+
+Use "kenall help <command>" for more information about a command.
 ```
 
 # Todo
