@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -164,19 +163,11 @@ func Normalize(r io.Reader, w io.Writer, option NormalizeOption) error {
 			}
 		}
 
-		hashSet := make(map[string]struct{})
-
 		normer.push(input)
 		for normer.canPop() {
 
 			output := normer.pop()
 			outputCSV := output.revertCSV()
-
-			if _, ok := hashSet[outputCSV]; ok {
-				fmt.Println(outputCSV)
-				continue
-			}
-			hashSet[outputCSV] = struct{}{}
 
 			if outputLines > 0 {
 				outputCSV = "\n" + outputCSV
