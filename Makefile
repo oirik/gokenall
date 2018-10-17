@@ -21,7 +21,7 @@ endif
 .PHONY: golint
 golint:
 ifndef GOLINT
-	go get -u github.com/golang/lint/golint
+	go get -u golang.org/x/lint/golint
 endif
 
 .PHONY: deps
