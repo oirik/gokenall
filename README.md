@@ -52,7 +52,7 @@ Or download binaries from [github releases](https://github.com/oirik/gokenall/re
 ### usage
 
 ```
-$ kenall [subcommand] [options]
+$ kenall <command> [arguments]
 ```
 
 （例）日本郵便のデータが更新された時だけダウンロードする。
