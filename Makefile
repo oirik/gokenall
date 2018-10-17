@@ -3,7 +3,7 @@ VERSION   := $(shell git describe --tags --abbrev=0)
 REVISION  := $(shell git rev-parse --short HEAD)
 GODEP     := $(shell command -v dep 2> /dev/null)
 GOLINT    := $(shell command -v golint 2> /dev/null)
-LDFLAGS   := -X 'main.Version=$(VERSION)' -X 'main.Revision=$(REVISION)'
+LDFLAGS   := -X 'main.version=$(VERSION)' -X 'main.revision=$(REVISION)'
 DISTDIR   :=./dist
 VENDORDIR :=./vendor
 EXEC_DIRS := find * -type d -exec
@@ -30,7 +30,7 @@ deps: godep
 
 .PHONY: build
 build: deps
-	go build -ldflags "$(LDFLAGS)" -o bin/$(NAME)
+	go build -ldflags "$(LDFLAGS)" -o bin/$(NAME) cmd/kenall/kenall.go
 
 .PHONY: clean
 clean:
@@ -41,18 +41,18 @@ clean:
 .PHONY: lint
 lint: golint deps
 	go vet ./...
-	golint -set_exit_status ./...
+	golint -set_exit_status `go list ./... | grep -v /vendor/`
 
 .PHONY: install
 install: test
-	go install -ldflags "$(LDFLAGS)"
+	go install -ldflags "$(LDFLAGS)" ./cmd/kenall
 
 .PHONY: cross-build
 cross-build: test
 	rm -rf $(DISTDIR)/*
 	for os in darwin linux windows; do \
 		for arch in amd64 386; do \
-			GOOS=$$os GOARCH=$$arch CGO_ENABLED=0 go build -a -ldflags "$(LDFLAGS)" -o dist/$$os-$$arch/$(NAME); \
+			GOOS=$$os GOARCH=$$arch CGO_ENABLED=0 go build -a -ldflags "$(LDFLAGS)" -o dist/$$os-$$arch/$(NAME) cmd/kenall/kenall.go; \
 			if [ "$${os}" = "windows" ]; then \
 				mv dist/$$os-$$arch/$(NAME) dist/$$os-$$arch/$(NAME).exe; \
 			fi; \
