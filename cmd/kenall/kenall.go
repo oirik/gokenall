@@ -126,8 +126,8 @@ func (normalize *normalizeCommand) SetFlag(fs *flag.FlagSet) {
 func (normalize *normalizeCommand) Execute(fs *flag.FlagSet) gosubcommand.ExitCode {
 	input := fs.Arg(0)
 
-	var r io.Reader
-	var w io.Writer
+	var r io.ReadCloser
+	var w io.WriteCloser
 
 	if input == "" || input == "-" {
 		r = os.Stdin
@@ -137,9 +137,9 @@ func (normalize *normalizeCommand) Execute(fs *flag.FlagSet) gosubcommand.ExitCo
 			fmt.Fprintln(os.Stderr, errors.Wrapf(err, "failed to open file: %s", input))
 			return gosubcommand.ExitCodeError
 		}
-		defer f.Close()
 		r = f
 	}
+	defer r.Close()
 
 	if normalize.output == "" || normalize.output == "-" {
 		w = os.Stdout
@@ -149,9 +149,9 @@ func (normalize *normalizeCommand) Execute(fs *flag.FlagSet) gosubcommand.ExitCo
 			fmt.Fprintln(os.Stderr, errors.Wrapf(err, "failed to create file: %s", normalize.output))
 			return gosubcommand.ExitCodeError
 		}
-		defer f.Close()
 		w = f
 	}
+	defer w.Close()
 
 	option := gokenall.DefaultNormalizeOption
 	if normalize.width {
