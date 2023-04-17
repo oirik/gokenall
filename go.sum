@@ -1,0 +1,6 @@
+github.com/oirik/gosubcommand v0.0.0-20181009132036-939dbbd624ef h1:5KeRuFzrI1tWLZzcUDsz8SV4XB9NHxgLU4PqVhiTYhs=
+github.com/oirik/gosubcommand v0.0.0-20181009132036-939dbbd624ef/go.mod h1:x6TjL9o4OzdaBRj1mgD/dlH8/wOVl/hXLObxDMn7+f4=
+github.com/pkg/errors v0.8.0 h1:WdK/asTD0HN+q6hsWO3/vpuAkAr+tw6aNJNDFFf0+qw=
+github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+golang.org/x/text v0.9.0 h1:2sjJmO8cDvYveuX97RDLsxlyUxLl+GHoLxBiRdHllBE=
+golang.org/x/text v0.9.0/go.mod h1:e1OnstbJyHTd6l/uOt8jFFHp6TRDWZR/bV3emEE/zU8=

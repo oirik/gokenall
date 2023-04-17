@@ -127,18 +127,24 @@ func Normalize(r io.Reader, w io.Writer, option NormalizeOption) error {
 	csvReader := csv.NewReader(transform.NewReader(r, japanese.ShiftJIS.NewDecoder()))
 	csvReader.ReuseRecord = true
 
-	var writer *bufio.Writer
+	var writer io.Writer
 	if option&NormalizeWidth == 0 {
 		if option&NormalizeUTF8 == 0 {
-			writer = bufio.NewWriter(transform.NewWriter(w, japanese.ShiftJIS.NewEncoder()))
+			transformer := transform.NewWriter(w, japanese.ShiftJIS.NewEncoder())
+			defer transformer.Close()
+			writer = transformer
 		} else {
-			writer = bufio.NewWriter(w)
+			writer = w
 		}
 	} else {
 		if option&NormalizeUTF8 == 0 {
-			writer = bufio.NewWriter(transform.NewWriter(w, transform.Chain(norm.NFD, width.Fold, norm.NFC, japanese.ShiftJIS.NewEncoder())))
+			transformer := transform.NewWriter(w, transform.Chain(norm.NFD, width.Fold, norm.NFC, japanese.ShiftJIS.NewEncoder()))
+			defer transformer.Close()
+			writer = transformer
 		} else {
-			writer = bufio.NewWriter(transform.NewWriter(w, transform.Chain(norm.NFD, width.Fold, norm.NFC)))
+			transformer := transform.NewWriter(w, transform.Chain(norm.NFD, width.Fold, norm.NFC))
+			defer transformer.Close()
+			writer = transformer
 		}
 	}
 
@@ -174,13 +180,12 @@ func Normalize(r io.Reader, w io.Writer, option NormalizeOption) error {
 			}
 			outputLines++
 
-			_, err := writer.WriteString(outputCSV)
+			_, err := writer.Write([]byte(outputCSV))
 			if err != nil {
 				return errors.Wrapf(err, "failed to write string to output: input-line=%d output-line=%d", inputLines, outputLines)
 			}
 		}
 	}
-	writer.Flush()
 	return nil
 }
 
