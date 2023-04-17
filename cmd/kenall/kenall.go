@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"io"
@@ -168,8 +169,15 @@ func (normalize *normalizeCommand) Execute(fs *flag.FlagSet) gosubcommand.ExitCo
 	} else {
 		option &^= gokenall.NormalizeTrim
 	}
-	if err := gokenall.Normalize(r, w, option); err != nil {
+	bufR := bufio.NewReader(r)
+	bufW := bufio.NewWriter(w)
+	if err := gokenall.Normalize(bufR, bufW, option); err != nil {
 		fmt.Fprintln(os.Stderr, err)
+		return gosubcommand.ExitCodeError
+	}
+	err := bufW.Flush()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, fmt.Errorf("failed to flush: %v", err))
 		return gosubcommand.ExitCodeError
 	}
 
